@@ -65,6 +65,31 @@ public class various_useful_functions : MonoBehaviour
         return intToReturn;
     }
 
+    public bool isarraynull(GameObject[] arr)
+    {
+        bool booltoreturn;
+
+        int intToReturn = 99999;
+        for (int i = 0; i < arr.Length; ++i)
+        {
+            if (arr[i] != null)
+            {
+                intToReturn = i;
+            }
+        }
+
+        if (intToReturn == 99999)
+        {
+            booltoreturn = true;
+        }
+        else
+        {
+            booltoreturn = false;
+        }
+
+        return booltoreturn;
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

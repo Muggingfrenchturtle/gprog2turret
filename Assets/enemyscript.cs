@@ -10,11 +10,21 @@ public class enemyscript : MonoBehaviour //basically godot pathfollow2d
     public float movespeed = 0.5f;
 
     public bool reversed = false;
-    
+
+    public bool inrange = false;
+
+    public scoremanagerscript scoremanager;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void OnEnable()
+    {
+        Debug.Log("enemy enabled");
+    }
     void Start()
     {
-        path2d = transform.parent.GetComponentInChildren<ineedpath2dscript>(); //this looks unstable as hell
+       //path2d = transform.parent.GetComponentInChildren<ineedpath2dscript>(); //this looks unstable as hell
+   
+        //scoremanager = transform.parent.GetComponentInChildren<scoremanagerscript>();
     }
 
     // Update is called once per frame
@@ -29,9 +39,14 @@ public class enemyscript : MonoBehaviour //basically godot pathfollow2d
 
     }
 
+    void OnDisable()
+    {
+        Debug.Log("enemy disabled");
+    }
+
     private void pathfollow2dprogressimplement()
     {
-        Vector2 progline = path2d.points[0] + progress * (path2d.points[1] - path2d.points[0]); //lmao this works. its also 0-100%. progress implemented like this is progresspercentage instead of per pixel like godot
+        Vector3 progline = path2d.points[0] + progress * (path2d.points[1] - path2d.points[0]); //lmao this works. its also 0-100%. progress implemented like this is progresspercentage instead of per pixel like godot
 
         transform.position = progline;
     }
@@ -47,7 +62,8 @@ public class enemyscript : MonoBehaviour //basically godot pathfollow2d
         {
             progress = 1;
         }
-        */ //with the above method, the enemy can get out of the path if the progress value gets changed hard enough
+        */
+         //with the above method, the enemy can get out of the path if the progress value gets changed hard enough
 
         progress = Mathf.Clamp(progress, 0, 1);
     }
@@ -76,6 +92,40 @@ public class enemyscript : MonoBehaviour //basically godot pathfollow2d
        else if (progress >= 1 && reversed == false)
         {
             reversed = true;
+        }
+    }
+
+/*
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "turretrange")
+        {
+            inrange = true;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "turretrange")
+        {
+            inrange = false;
+        }
+    }
+*/
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "hazard")
+        {
+            scoremanager.addscore(-1); //eh
+        }
+    }
+
+    private void OnMouseDown() 
+    {
+        if (inrange == true)
+        {
+            Debug.Log("click");
+            scoremanager.addscore(1);
+            Destroy(gameObject);
         }
     }
 }

@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 
 public class turretscript : MonoBehaviour
@@ -7,6 +8,9 @@ public class turretscript : MonoBehaviour
     public GameObject closestenemy;
 
     public various_useful_functions vuf;
+
+    private GameObject enemyfordottracking;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,17 +20,33 @@ public class turretscript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         turrettrack();
     }
 
 
+    private void turretrackbutwithdot()
+    {
+    }
     private void turrettrack()
     {
-        var direction = (getclosestenemy().transform.position - transform.position).normalized;
+        if (vuf.isarraynull(enemy) == false)
+        {
+                
+            
+            var direction = (getclosestenemy().transform.position - transform.position).normalized;
 
-        //direction.z += 16;
+            transform.right = Vector2.Lerp(transform.right, direction, 25 * Time.deltaTime);
+            //we dont need lookrotation
 
-        transform.right = Vector2.Lerp(transform.right, direction, 25 * Time.deltaTime);
+
+
+            //Vector3 transformmod = Vector3.zero;
+
+            //transformmod.z = Vector2.Dot(transform.right, direction);
+
+            //transform.rotation = transformmod;
+        }
     }
 
     private GameObject getclosestenemy()
